@@ -1,31 +1,54 @@
 package com.example.phonebook;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    @Override
+    Button addUserBtn;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        addUserBtn = findViewById(R.id.addUserBtn);
         recyclerView = findViewById(R.id.recyclerView);
-        String[] users = new String[100];
+        addUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddUser.class);
+                startActivity(intent);
+            }
+        });
+        /*String[] users = new String[100];
         for (int i = 0; i < 100; i++) {
             users[i] = "user - " + (i + 1);
-        }
+        }*/
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        UserAdapter userAdapter = new UserAdapter(users);
+    }
+
+    public void recyclerViewInit(){
+        Users users = Users.getUsers();
+        UserAdapter userAdapter = new UserAdapter(users.getUserList());
         recyclerView.setAdapter(userAdapter);
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        recyclerViewInit();
+    }
+
+    // Класс держателя одного элемента списка
     public class UserHolder extends RecyclerView.ViewHolder{
         TextView itemTextView;
         public UserHolder(LayoutInflater inflater, ViewGroup viewGroup) {
@@ -38,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
      public class UserAdapter extends RecyclerView.Adapter<UserHolder>{
-        String[] userList = new String[100];
-        public UserAdapter(String[] userList) {
+        ArrayList<User> userList = new ArrayList<>();
+        public UserAdapter(ArrayList<User> userList) {
             this.userList = userList;
         }
         @Override
@@ -50,14 +73,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(UserHolder holder, int position) {
-            String user = userList[position];
+            String user = userList.get(position).getLastname()+" "+userList.get(position).getName();
             holder.bind(user);
         }
         @Override
         public int getItemCount(){
-            return userList.length;
+            return userList.size();
         }
     }
-
-
 }

@@ -5,11 +5,7 @@ public class User {
     private String lastname;
     private String phone;
 
-    public User(String name, String lastname, String phone) {
-        this.name = name;
-        this.lastname = lastname;
-        this.phone = phone;
-    }
+    public User() {}
 
     public String getName() {
         return name;

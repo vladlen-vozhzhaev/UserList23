@@ -1,11 +1,20 @@
 package com.example.phonebook;
 
-public class User {
+import java.io.Serializable;
+import java.util.UUID;
+
+public class User implements Serializable {
     private String name;
     private String lastname;
     private String phone;
+    private UUID uuid;
 
-    public User() {}
+    public User() {
+        this.uuid = UUID.randomUUID();
+    }
+    public User (UUID uuid){
+        this.uuid = uuid;
+    }
 
     public String getName() {
         return name;
@@ -29,5 +38,9 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 }

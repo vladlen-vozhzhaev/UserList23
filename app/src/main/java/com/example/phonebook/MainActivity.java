@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void recyclerViewInit(){
-        Users users = Users.getUsers();
+        Users users = Users.getUsers(MainActivity.this);
         UserAdapter userAdapter = new UserAdapter(users.getUserList());
         recyclerView.setAdapter(userAdapter);
     }
@@ -49,14 +49,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Класс держателя одного элемента списка
-    public class UserHolder extends RecyclerView.ViewHolder{
+    public class UserHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView itemTextView;
+        User user;
         public UserHolder(LayoutInflater inflater, ViewGroup viewGroup) {
             super(inflater.inflate(R.layout.single_item, viewGroup, false));
             itemTextView = itemView.findViewById(R.id.itemTextView);
+            itemView.setOnClickListener(this);
         }
-        public void bind(String user){
-            itemTextView.setText(user);
+        public void bind(User user){
+            this.user = user;
+            itemTextView.setText(user.getName()+" "+user.getLastname());
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+            intent.putExtra("user", this.user);
+            startActivity(intent);
         }
     }
 
@@ -73,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(UserHolder holder, int position) {
-            String user = userList.get(position).getLastname()+" "+userList.get(position).getName();
+            User user = userList.get(position);
             holder.bind(user);
         }
         @Override

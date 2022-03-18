@@ -27,7 +27,7 @@ public class AddUser extends AppCompatActivity {
                 user.setName(editTextName.getText().toString());
                 user.setLastname(editTextLastname.getText().toString());
                 user.setPhone(editTextPhone.getText().toString());
-                Users users = Users.getUsers();
+                Users users = Users.getUsers(AddUser.this);
                 users.addUser(user);
                 onBackPressed();
             }

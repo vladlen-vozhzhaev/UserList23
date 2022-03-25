@@ -9,6 +9,7 @@ import com.example.phonebook.database.UserBaseHelper;
 import com.example.phonebook.database.UserDBSchema;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Users {
     private ArrayList<User> userList;
@@ -61,10 +62,13 @@ public class Users {
         return userList;
     }
 
-    public void deleteUser(){
-        // Метод удаления записи из БД
+    public void deleteUser(UUID uuid){
+        String uuidString = uuid.toString();
+        database.delete(UserDBSchema.UserTable.NAME, UserDBSchema.Cols.UUID+"=?", new String[]{uuidString});
     }
-    public void updateUser(){
-        // Метод редактирования записи
+    public void updateUser(User user){
+        String uuidString = user.getUuid().toString();
+        ContentValues values = getContentValues(user);
+        database.update(UserDBSchema.UserTable.NAME, values, UserDBSchema.Cols.UUID+"=?", new String[]{uuidString});
     }
 }
